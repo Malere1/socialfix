@@ -1,0 +1,120 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard | SocialFix{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">OVERVIEW</span>
+        <h1>Home</h1>
+        <p class="muted">
+            Welcome back, {{ session.get('name', 'User') }}.
+            Here is your SocialFix overview.
+        </p>
+    </div>
+
+    <a class="button" href="{{ url_for('social_accounts') }}">
+        + Manage Accounts
+    </a>
+</section>
+
+<section class="card-grid">
+    <article class="card stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Social Accounts</span>
+            <span class="stat-icon">◎</span>
+        </div>
+
+        <p class="stat-value">{{ social_count|default(0) }}</p>
+        <span class="stat-label">Saved social accounts</span>
+
+        <a href="{{ url_for('social_accounts') }}">View accounts →</a>
+    </article>
+
+    <article class="card stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Account Balance</span>
+            <span class="stat-icon">◈</span>
+        </div>
+
+        <p class="stat-value">
+            {{ "%.2f"|format(balance|default(0)|float) }}
+        </p>
+
+        <span class="stat-label">Recorded account balance</span>
+        <a href="{{ url_for('payments') }}">View payments →</a>
+    </article>
+
+    <article class="card stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Payments</span>
+            <span class="stat-icon">↗</span>
+        </div>
+
+        <p class="stat-value" style="font-size:21px;">Payments</p>
+        <span class="stat-label">Payment information and options</span>
+        <a href="{{ url_for('payments') }}">Open payments →</a>
+    </article>
+
+    <article class="card stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Support</span>
+            <span class="stat-icon">☏</span>
+        </div>
+
+        <p class="stat-value" style="font-size:21px;">Help Centre</p>
+        <span class="stat-label">Get assistance with your account</span>
+        <a href="{{ url_for('support') }}">Contact support →</a>
+    </article>
+</section>
+
+<section class="content-grid">
+    <article class="card hero-card">
+        <span class="eyebrow">NEXT STEPS</span>
+
+        <h2 style="font-size:27px;margin-top:12px;">
+            Access your social profile
+        </h2>
+
+        <p>
+            View your saved social accounts, update your account information,
+            and keep your workspace organized.
+        </p>
+
+        <div class="button-row" style="margin-top:22px;">
+            <a class="button" href="{{ url_for('social_accounts') }}">
+                View Accounts →
+            </a>
+
+            <a class="button secondary" href="{{ url_for('payments') }}">
+                View Payments
+            </a>
+        </div>
+    </article>
+
+    <article class="card">
+        <div class="section-head">
+            <h2>Quick Links</h2>
+        </div>
+
+        <a class="side-link" href="{{ url_for('social_accounts') }}">
+            <span class="side-icon">◎</span> Social Accounts
+        </a>
+
+        <a class="side-link" href="{{ url_for('payments') }}">
+            <span class="side-icon">◈</span> Payments
+        </a>
+
+        <a class="side-link" href="{{ url_for('support') }}">
+            <span class="side-icon">☏</span> Support Requests
+        </a>
+
+        {% if session.get('is_admin') %}
+        <a class="side-link" href="{{ url_for('admin') }}">
+            <span class="side-icon">⚙</span> Admin Dashboard
+        </a>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

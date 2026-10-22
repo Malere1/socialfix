@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SocialFix | Payments</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #111a2e;
+            border-bottom: 1px solid #26334b;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+        }
+
+        main {
+            width: 90%;
+            max-width: 950px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: #111a2e;
+            border: 1px solid #26334b;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+
+        .balance {
+            color: #60a5fa;
+            font-size: 38px;
+            font-weight: bold;
+            margin: 15px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .muted {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        .address {
+            background: #0b1120;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 18px 0;
+            overflow-wrap: anywhere;
+            line-height: 1.7;
+        }
+
+        .copy-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .copy-button:hover {
+            background: #2563eb;
+        }
+
+        .notice {
+            border-left: 4px solid #f59e0b;
+            background: #1c2434;
+            color: #fcd34d;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 5px;
+            line-height: 1.7;
+        }
+
+        #copyMessage {
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            nav {
+                gap: 12px;
+            }
+
+            main {
+                width: 92%;
+                margin: 25px auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .balance {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">SocialFix</div>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('social_accounts') }}">Social Accounts</a>
+            <a href="{{ url_for('support') }}">Support</a>
+            <a href="{{ url_for('payments') }}">Payments</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Payments</h1>
+
+        <p class="intro">
+            View your account balance and payment information.
+        </p>
+
+        <section class="card">
+            <h2>Account Balance</h2>
+
+            <p class="balance">
+                ${{ "%.2f"|format(balance|default(0)|float) }}
+            </p>
+
+            <p class="muted">
+                This is the balance recorded in your SocialFix account.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Bitcoin Payment Information</h2>
+
+            <p class="muted">
+                If you need to make a payment, confirm the amount and
+                payment details with your administrator first.
+            </p>
+
+            <div class="address">
+                <strong>Bitcoin address:</strong>
+                <p id="bitcoinAddress">{{ bitcoin_address|default('Contact your administrator for the payment address.') }}</p>
+            </div>
+
+            <button
+                class="copy-button"
+                type="button"
+                onclick="copyAddress()">
+                Copy Address
+            </button>
+
+            <p id="copyMessage" class="muted"></p>
+
+            <div class="notice">
+                Always verify the wallet address and network before sending
+                money. Cryptocurrency transfers may be irreversible.
+                This page does not confirm that a payment has been received.
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function copyAddress() {
+            const address = document
+                .getElementById("bitcoinAddress")
+                .textContent.trim();
+
+            const message = document.getElementById("copyMessage");
+
+            if (
+                !address ||
+                address.startsWith("Contact your administrator")
+            ) {
+                message.textContent = "No payment address is available.";
+                return;
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(address)
+                    .then(function () {
+                        message.textContent = "Address copied successfully.";
+                    })
+                    .catch(function () {
+                        message.textContent =
+                            "Copy failed. Please copy the address manually.";
+                    });
+            } else {
+                message.textContent =
+                    "Please select and copy the address manually.";
+            }
+        }
+    </script>
+</body>
+</html>

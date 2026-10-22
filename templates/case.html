@@ -1,0 +1,270 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}My Support Cases | SocialFix{% endblock %}
+
+{% block content %}
+
+<style>
+    .cases-page {
+        max-width: 1100px;
+        width: 92%;
+        margin: 40px auto;
+        font-family: Arial, sans-serif;
+        color: #263b31;
+    }
+
+    .cases-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .cases-heading h1 {
+        color: #123b30;
+        margin: 0 0 8px;
+    }
+
+    .cases-heading p {
+        color: #68756e;
+        margin: 0;
+    }
+
+    .cases-button {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 8px;
+        background: #176b50;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .cases-button:hover {
+        background: #104b38;
+    }
+
+    .cases-card {
+        background: white;
+        border: 1px solid #e0e9e3;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .cases-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .cases-table th,
+    .cases-table td {
+        padding: 16px;
+        border-bottom: 1px solid #e8eee9;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .cases-table th {
+        background: #f0f7f2;
+        color: #174b36;
+    }
+
+    .cases-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .case-status {
+        display: inline-block;
+        background: #fff1ce;
+        color: #805600;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .case-status.resolved {
+        background: #dff5e6;
+        color: #176b50;
+    }
+
+    .case-status.rejected {
+        background: #fde5e5;
+        color: #a12626;
+    }
+
+    .case-link {
+        color: #176b50;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .cases-empty {
+        text-align: center;
+        padding: 45px 20px;
+    }
+
+    .cases-empty h2 {
+        color: #123b30;
+    }
+
+    .cases-empty p {
+        color: #68756e;
+        line-height: 1.7;
+    }
+
+    .cases-mobile-list {
+        display: none;
+    }
+
+    @media (max-width: 700px) {
+        .cases-table-wrap {
+            display: none;
+        }
+
+        .cases-mobile-list {
+            display: block;
+        }
+
+        .case-mobile-card {
+            padding: 20px;
+            border-bottom: 1px solid #e8eee9;
+        }
+
+        .case-mobile-card:last-child {
+            border-bottom: none;
+        }
+
+        .case-mobile-card p {
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+    }
+</style>
+
+<div class="cases-page">
+
+    <div class="cases-heading">
+        <div>
+            <h1>My Support Cases</h1>
+            <p>View and track your submitted support requests.</p>
+        </div>
+
+        <a href="{{ url_for('new_case') }}" class="cases-button">
+            + New Support Request
+        </a>
+    </div>
+
+    <div class="cases-card">
+
+        {% if cases %}
+
+            <div class="cases-table-wrap">
+                <table class="cases-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Platform</th>
+                            <th>Issue</th>
+                            <th>Status</th>
+                            <th>Date Submitted</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for case in cases %}
+                            <tr>
+                                <td>#{{ case.id }}</td>
+                                <td>{{ case.platform }}</td>
+                                <td>{{ case.issue or "Account support" }}</td>
+                                <td>
+                                    {% set status = case.status or "Pending" %}
+                                    <span class="case-status {% if status|lower == 'resolved' %}resolved{% elif status|lower == 'rejected' %}rejected{% endif %}">
+                                        {{ status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if case.created_at %}
+                                        {{ case.created_at.strftime("%d %b %Y") }}
+                                    {% else %}
+                                        Not available
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a class="case-link"
+                                       href="{{ url_for('report', case_id=case.id) }}">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cases-mobile-list">
+                {% for case in cases %}
+                    <div class="case-mobile-card">
+                        <h3>Case #{{ case.id }}</h3>
+
+                        <p>
+                            <strong>Platform:</strong>
+                            {{ case.platform }}
+                        </p>
+
+                        <p>
+                            <strong>Issue:</strong>
+                            {{ case.issue or "Account support" }}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+                            {{ case.status or "Pending" }}
+                        </p>
+
+                        <p>
+                            <strong>Date:</strong>
+                            {% if case.created_at %}
+                                {{ case.created_at.strftime("%d %b %Y") }}
+                            {% else %}
+                                Not available
+                            {% endif %}
+                        </p>
+
+                        <a class="case-link"
+                           href="{{ url_for('report', case_id=case.id) }}">
+                            View Case Details →
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+
+            <div class="cases-empty">
+                <h2>No support cases yet</h2>
+
+                <p>
+                    You haven't submitted a support request.
+                    When you create one, it will appear here so
+                    you can follow its progress.
+                </p>
+
+                <a href="{{ url_for('new_case') }}"
+                   class="cases-button">
+                    Create Your First Request
+                </a>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

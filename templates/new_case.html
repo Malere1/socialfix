@@ -1,0 +1,48 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}New Support Request | SocialFix{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-card">
+        <h1>Submit a Support Request</h1>
+        <p>Tell us about the account access problem you need guidance with.</p>
+
+        <form method="POST" action="{{ url_for('new_case') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label for="platform">Social media platform</label>
+            <select id="platform" name="platform" required>
+                <option value="">Select a platform</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Instagram">Instagram</option>
+                <option value="TikTok">TikTok</option>
+                <option value="Snapchat">Snapchat</option>
+                <option value="X">X</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Telegram">Telegram</option>
+                <option value="LinkedIn">LinkedIn</option>
+            </select>
+
+            <label for="description">Describe your problem</label>
+            <textarea
+                id="description"
+                name="description"
+                rows="6"
+                placeholder="Explain what happened to your account..."
+                required
+            ></textarea>
+
+            <button type="submit" class="dashboard-button">
+                Submit Request
+            </button>
+        </form>
+
+        <p>
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+```

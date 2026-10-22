@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialFix | Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        header {
+            background: #111a2e;
+            border-bottom: 1px solid #26334d;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: 32px auto;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #111a2e;
+            border: 1px solid #26334d;
+            padding: 23px;
+            border-radius: 12px;
+        }
+
+        .stat-card p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 13px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+        }
+
+        .blue { color: #60a5fa; }
+        .yellow { color: #fbbf24; }
+        .green { color: #4ade80; }
+        .red { color: #f87171; }
+
+        .panel {
+            background: #111a2e;
+            border: 1px solid #26334d;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h2 {
+            font-size: 20px;
+        }
+
+        .tools {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input, select {
+            padding: 11px 12px;
+            border: 1px solid #334155;
+            border-radius: 7px;
+            background: #0b1120;
+            color: #e5e7eb;
+            font: inherit;
+            min-width: 150px;
+        }
+
+        input:focus, select:focus {
+            outline: 1px solid #60a5fa;
+            border-color: #60a5fa;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #26334d;
+            font-size: 13px;
+            vertical-align: top;
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: normal;
+            white-space: nowrap;
+        }
+
+        td {
+            overflow-wrap: anywhere;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .muted {
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .status.pending {
+            background: #713f12;
+            color: #fde68a;
+        }
+
+        .status.in-progress {
+            background: #1e3a8a;
+            color: #bfdbfe;
+        }
+
+        .status.resolved {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+
+        .status.rejected {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        .update-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 140px;
+        }
+
+        .update-form select {
+            min-width: 130px;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .notice {
+            padding: 13px 15px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            background: #172554;
+            color: #bfdbfe;
+        }
+
+        .notice.error {
+            background: #450a0a;
+            color: #fecaca;
+        }
+
+        .empty {
+            color: #94a3b8;
+            padding: 18px 0;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .heading h1 {
+                font-size: 25px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+
+            input, select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">SocialFix Admin</div>
+
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('dashboard') }}">User Dashboard</a>
+            <a href="{{ url_for('support') }}">Support Center</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="heading">
+            <h1>Admin Dashboard</h1>
+            <p>Manage users, review support requests, and monitor activity.</p>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="notice {% if category == 'error' %}error{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% set tickets = support_requests|default(requests|default([])) %}
+        {% set total_users_count = total_users|default(users|length) %}
+        {% set total_requests_count = total_requests|default(tickets|length) %}
+        {% set pending_count = namespace(value=0) %}
+        {% set resolved_count = namespace(value=0) %}
+
+        {% for ticket in tickets %}
+            {% set current_status = (ticket['status'] or 'Pending')|lower %}
+            {% if current_status == 'pending' %}
+                {% set pending_count.value = pending_count.value + 1 %}
+            {% elif current_status == 'resolved' %}
+                {% set resolved_count.value = resolved_count.value + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        <section class="stats">
+            <article class="stat-card">
+                <p>Total Users</p>
+                <h2 class="blue">{{ total_users_count }}</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Total Support Requests</p>
+                <h2>{{ total_requests_count }}</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Pending Requests</p>
+                <h2 class="yellow">{{ pending_requests|default(pending_count.value) }}</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Resolved Requests</p>
+                <h2 class="green">{{ resolved_requests|default(resolved_count.value) }}</h2>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Support Requests</h2>
+
+                <div class="tools">
+                    <input
+                        type="search"
+                        id="requestSearch"
+                        placeholder="Search requests..."
+                        aria-label="Search support requests"
+                    >
+
+                    <select id="statusFilter" aria-label="Filter by status">
+                        <option value="">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if tickets %}
+                <div class="table-wrapper">
+                    <table id="requestsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Requester</th>
+                                <th>Subject and Message</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Update Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in tickets %}
+                                {% set status = item['status'] or 'Pending' %}
+                                <tr class="request-row"
+                                    data-status="{{ status|lower }}"
+                                    data-search="{{ (item['id'] ~ ' ' ~ (item['user_name'] or '') ~ ' ' ~ (item['user_email'] or '') ~ ' ' ~ (item['subject'] or '') ~ ' ' ~ (item['message'] or '') ~ ' ' ~ status)|lower }}">
+                                    <td>#{{ item['id'] }}</td>
+
+                                    <td>
+                                        <strong>{{ item['user_name'] or 'Unknown user' }}</strong>
+                                        <br>
+                                        <span class="muted">
+                                            {{ item['user_email'] or 'No email available' }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <strong>{{ item['subject'] or 'Support request' }}</strong>
+                                        <p class="muted">
+                                            {{ item['message'] or '' }}
+                                        </p>
+                                    </td>
+
+                                    <td>{{ item['created_at'] or 'N/A' }}</td>
+
+                                    <td>
+                                        <span class="status {{ status|lower|replace(' ', '-') }}">
+                                            {{ status }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <form
+                                            class="update-form"
+                                            method="POST"
+                                            action="{{ url_for('update_request_status', request_id=item['id']) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="{{ csrf_token }}"
+                                            >
+
+                                            <select name="status" aria-label="New status for request {{ item['id'] }}">
+                                                <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                                                <option value="In Progress" {% if status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                                <option value="Resolved" {% if status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                                <option value="Rejected" {% if status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                            </select>
+
+                                            <button type="submit">Save Status</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="noRequestResults" class="empty" hidden>
+                    No support requests match your search.
+                </p>
+            {% else %}
+                <p class="empty">There are no support requests yet.</p>
+            {% endif %}
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Registered Users</h2>
+
+                <input
+                    type="search"
+                    id="userSearch"
+                    placeholder="Search users..."
+                    aria-label="Search registered users"
+                >
+            </div>
+
+            {% if users %}
+                <div class="table-wrapper">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Account Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for person in users %}
+                                <tr class="user-row"
+                                    data-search="{{ (person['id'] ~ ' ' ~ (person['name'] or '') ~ ' ' ~ (person['email'] or ''))|lower }}">
+                                    <td>#{{ person['id'] }}</td>
+                                    <td>{{ person['name'] or 'Unnamed user' }}</td>
+                                    <td>{{ person['email'] or 'No email' }}</td>
+                                    <td>{{ person['created_at'] or 'N/A' }}</td>
+                                    <td>
+                                        {% if person['is_admin'] %}
+                                            <span class="status resolved">Admin</span>
+                                        {% else %}
+                                            <span class="status">User</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="noUserResults" class="empty" hidden>
+                    No users match your search.
+                </p>
+            {% else %}
+                <p class="empty">No registered users were found.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 SocialFix. Admin access is restricted to authorized accounts.
+    </footer>
+
+    <script>
+        const requestSearch = document.getElementById("requestSearch");
+        const statusFilter = document.getElementById("statusFilter");
+        const requestRows = document.querySelectorAll(".request-row");
+        const noRequestResults = document.getElementById("noRequestResults");
+
+        function filterRequests() {
+            const searchTerm = requestSearch.value.toLowerCase().trim();
+            const selectedStatus = statusFilter.value.toLowerCase();
+            let visibleCount = 0;
+
+            requestRows.forEach(row => {
+                const searchableText = row.dataset.search || "";
+                const rowStatus = row.dataset.status || "";
+
+                const matchesSearch = searchableText.includes(searchTerm);
+                const matchesStatus =
+                    !selectedStatus || rowStatus === selectedStatus;
+
+                const visible = matchesSearch && matchesStatus;
+                row.hidden = !visible;
+
+                if (visible) visibleCount++;
+            });
+
+            if (noRequestResults) {
+                noRequestResults.hidden = visibleCount !== 0;
+            }
+        }
+
+        if (requestSearch) {
+            requestSearch.addEventListener("input", filterRequests);
+        }
+
+        if (statusFilter) {
+            statusFilter.addEventListener("change", filterRequests);
+        }
+
+        const userSearch = document.getElementById("userSearch");
+        const userRows = document.querySelectorAll(".user-row");
+        const noUserResults = document.getElementById("noUserResults");
+
+        if (userSearch) {
+            userSearch.addEventListener("input", () => {
+                const searchTerm = userSearch.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                userRows.forEach(row => {
+                    const searchableText = row.dataset.search || "";
+                    const visible = searchableText.includes(searchTerm);
+
+                    row.hidden = !visible;
+
+                    if (visible) visibleCount++;
+                });
+
+                if (noUserResults) {
+                    noUserResults.hidden = visibleCount !== 0;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

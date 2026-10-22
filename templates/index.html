@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+
+{% block title %}SocialFix | Home{% endblock %}
+
+{% block public_content %}
+<main class="main">
+    <section class="card hero-card" style="padding:clamp(28px,6vw,64px);">
+        <span class="eyebrow">WELCOME TO SOCIALFIX</span>
+
+        <h1 style="max-width:700px;font-size:clamp(36px,5vw,54px);margin-top:14px;">
+            Your social accounts. One simple workspace.
+        </h1>
+
+        <p style="font-size:17px;max-width:590px;margin:18px 0 25px;">
+            Organize your social account details, review payment options,
+            and contact support from one convenient place.
+        </p>
+
+        <div class="button-row">
+            <a class="button" href="{{ url_for('register') }}">
+                Create an account →
+            </a>
+            <a class="button secondary" href="{{ url_for('login') }}">
+                Log in
+            </a>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:32px;">
+            <span class="muted small">✓ Simple dashboard</span>
+            <span class="muted small">✓ Account management</span>
+            <span class="muted small">✓ Support access</span>
+        </div>
+    </section>
+
+    <section style="margin-top:36px;">
+        <span class="eyebrow">OUR FEATURES</span>
+        <h2 style="margin:8px 0;">Everything in one place</h2>
+        <p class="muted">
+            Access your important tools through a clean, simple interface.
+        </p>
+
+        <div class="card-grid">
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon">◎</span>
+                </div>
+                <h3 style="margin:0;">Social Accounts</h3>
+                <p class="muted small" style="margin:0;">
+                    Keep your saved social account information organized.
+                </p>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon">◈</span>
+                </div>
+                <h3 style="margin:0;">Payments</h3>
+                <p class="muted small" style="margin:0;">
+                    View the payment options available in your account.
+                </p>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon">☏</span>
+                </div>
+                <h3 style="margin:0;">Customer Support</h3>
+                <p class="muted small" style="margin:0;">
+                    Send support requests and follow up on your issues.
+                </p>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon">⌂</span>
+                </div>
+                <h3 style="margin:0;">Personal Dashboard</h3>
+                <p class="muted small" style="margin:0;">
+                    Find your main account tools in one workspace.
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section class="card" style="margin-top:24px;text-align:center;padding:34px 20px;">
+        <h2>Ready to get started?</h2>
+        <p class="muted">
+            Create your SocialFix account or log in to continue.
+        </p>
+
+        <div class="button-row" style="justify-content:center;">
+            <a class="button" href="{{ url_for('register') }}">
+                Get Started
+            </a>
+            <a class="button secondary" href="{{ url_for('login') }}">
+                Log In
+            </a>
+        </div>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialFix | Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 35px;
+            background: #111a2e;
+            border: 1px solid #26334d;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            margin-bottom: 12px;
+            color: #60a5fa;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin-bottom: 25px;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #e5e7eb;
+            font-size: 14px;
+        }
+
+        .error {
+            border: 1px solid #ef4444;
+        }
+
+        .success {
+            border: 1px solid #22c55e;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 13px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            outline: none;
+            background: #0b1120;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #60a5fa;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .footer {
+            margin-top: 22px;
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-container">
+        <div class="logo">SocialFix</div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Log in to your account to manage your social accounts
+            and support requests.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">Log In</button>
+        </form>
+
+        <p class="footer">
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Create an account</a>
+        </p>
+
+        <a class="back-link" href="{{ url_for('index') }}">
+            Back to Home
+        </a>
+    </main>
+</body>
+</html>

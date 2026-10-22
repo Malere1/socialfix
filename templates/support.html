@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SocialFix | Support Center</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #111a2e;
+            border-bottom: 1px solid #26334b;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1050px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #94a3b8;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: #111a2e;
+            border: 1px solid #26334b;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 8px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #334155;
+            border-radius: 7px;
+            background: #0b1120;
+            color: #e5e7eb;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #3b82f6;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .info-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #26334b;
+            line-height: 1.7;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #60a5fa;
+            margin-bottom: 5px;
+        }
+
+        .muted {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        .request {
+            background: #0b1120;
+            border: 1px solid #26334b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .request p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #26334b;
+            color: #bfdbfe;
+            font-size: 12px;
+        }
+
+        .empty {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                width: 92%;
+                margin: 25px auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">SocialFix</div>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('social_accounts') }}">Social Accounts</a>
+            <a href="{{ url_for('support') }}">Support</a>
+            <a href="{{ url_for('payments') }}">Payments</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Support Center</h1>
+
+        <p class="intro">
+            Need help with your account? Submit a support request and
+            check the status of your existing requests below.
+        </p>
+
+        <div class="layout">
+            <section class="card">
+                <h2>Submit a Support Request</h2>
+
+                <form action="{{ url_for('support') }}" method="POST">
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    <label for="subject">Subject</label>
+                    <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        placeholder="What do you need help with?"
+                        required
+                    >
+
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Choose a category</option>
+                        <option value="Account">Account</option>
+                        <option value="Login">Login problem</option>
+                        <option value="Payments">Payments</option>
+                        <option value="Social Accounts">Social accounts</option>
+                        <option value="Technical Issue">Technical issue</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <label for="message">Describe your issue</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="Explain how we can help you..."
+                        required
+                    ></textarea>
+
+                    <button type="submit">Submit Request</button>
+                </form>
+            </section>
+
+            <div>
+                <section class="card">
+                    <h2>How We Can Help</h2>
+
+                    <div class="info-item">
+                        <strong>Account access</strong>
+                        <p class="muted">
+                            Get help with signing in or accessing your account.
+                        </p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Payment questions</strong>
+                        <p class="muted">
+                            Ask about your recorded balance or payment status.
+                        </p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Technical issues</strong>
+                        <p class="muted">
+                            Report problems using SocialFix features.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Your Support Requests</h2>
+
+                    {% if requests %}
+                        {% for request in requests %}
+                            <div class="request">
+                                <p>
+                                    <strong>Subject:</strong>
+                                    {{ request['subject'] }}
+                                </p>
+
+                                <p>
+                                    <strong>Message:</strong>
+                                    {{ request['message'] }}
+                                </p>
+
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span class="status">
+                                        {{ request['status']|default('Pending') }}
+                                    </span>
+                                </p>
+
+                                {% if request['created_at'] is defined %}
+                                    <p class="muted">
+                                        Submitted: {{ request['created_at'] }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="empty">
+                            You have no support requests to display yet.
+                        </p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
